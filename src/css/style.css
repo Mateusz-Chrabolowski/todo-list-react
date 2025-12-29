@@ -58,8 +58,8 @@ body {
 }
 
 .task-status {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   background: #0e7a29;
   border-radius: 4px;
   cursor: pointer;
@@ -77,14 +77,14 @@ body {
 
 .delete-task {
   margin-left: auto;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   background: #e01515;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .task-text.done {
