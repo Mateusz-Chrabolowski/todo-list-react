@@ -1,44 +1,29 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import TaskControl from "./components/TaskControl";
+import useTasks from "./useTasks";
 
 function App() {
-  const tasksFromLocalStorage = localStorage.getItem("tasks");
-
-  const [tasks, setTasks] = useState(
-    tasksFromLocalStorage ? JSON.parse(tasksFromLocalStorage) : []
-  );
-
+  const inputRef = useRef(null);
   const [showCompleted, setShowCompleted] = useState(true);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = (text) => {
-    setTasks((prev) => [...prev, { text, done: false }]);
-  };
-
-  const toggleTask = (index) => {
-    setTasks((prev) =>
-      prev.map((task, i) =>
-        i === index ? { ...task, done: !task.done } : task
-      )
-    );
-  };
-
-  const deleteTask = (index) => {
-    setTasks((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const finishAll = () => {
-    setTasks((prev) => prev.map((task) => ({ ...task, done: true })));
-  };
+  const {
+    tasks,
+    addTask,
+    toggleTask,
+    deleteTask,
+    finishAll,
+  } = useTasks();
 
   const visibleTasks = showCompleted
     ? tasks
     : tasks.filter((task) => !task.done);
+
+  const handleAddTask = (text) => {
+    addTask(text);
+    inputRef.current?.focus();
+  };
 
   return (
     <>
@@ -46,7 +31,7 @@ function App() {
 
       <section className="card">
         <h2 className="card__title">Dodaj nowe zadanie</h2>
-        <TaskForm addTask={addTask} />
+        <TaskForm addTask={handleAddTask} />
       </section>
 
       <section className="card">

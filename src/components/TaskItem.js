@@ -1,18 +1,36 @@
+import styled from "styled-components";
+
+const Row = styled.li.attrs({
+  className: "task-row",
+})``;
+
+const StatusButton = styled.button.attrs({
+  className: "task-status",
+})``;
+
+const Text = styled.span.attrs(({ $done }) => ({
+  className: `task-text ${$done ? "done" : ""}`,
+}))``;
+
+const DeleteButton = styled.button.attrs({
+  className: "delete-task",
+})``;
+
 function TaskItem({ task, onToggle, onDelete }) {
   return (
-    <li className="task-row">
-      <button className="task-status" onClick={onToggle}>
+    <Row>
+      <StatusButton onClick={onToggle}>
         {task.done ? "✓" : ""}
-      </button>
+      </StatusButton>
 
-      <span className={`task-text ${task.done ? "done" : ""}`}>
+      <Text $done={task.done}>
         {task.text}
-      </span>
+      </Text>
 
-      <button className="delete-task" onClick={onDelete}>
+      <DeleteButton onClick={onDelete}>
         🗑
-      </button>
-    </li>
+      </DeleteButton>
+    </Row>
   );
 }
 
