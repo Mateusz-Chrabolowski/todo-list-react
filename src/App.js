@@ -1,35 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import TaskControls from "./components/TaskControl";
+import TaskControl from "./components/TaskControl";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  // 🔹 wczytanie z localStorage przy starcie
+  const tasksFromLocalStorage = localStorage.getItem("tasks");
+
+  const [tasks, setTasks] = useState(
+    tasksFromLocalStorage ? JSON.parse(tasksFromLocalStorage) : []
+  );
+
   const [showCompleted, setShowCompleted] = useState(true);
 
+  // 🔹 zapis do localStorage przy każdej zmianie tasks
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  // ➕ dodanie zadania
   const addTask = (text) => {
-    setTasks(prev => [...prev, { text, done: false }]);
+    setTasks((prev) => [...prev, { text, done: false }]);
   };
 
+  // ✅ przełączanie done
   const toggleTask = (index) => {
-    setTasks(prev =>
-      prev.map((t, i) =>
-        i === index ? { ...t, done: !t.done } : t
+    setTasks((prev) =>
+      prev.map((task, i) =>
+        i === index ? { ...task, done: !task.done } : task
       )
     );
   };
 
+  // 🗑 usuwanie zadania (i z localStorage)
   const deleteTask = (index) => {
-    setTasks(prev => prev.filter((_, i) => i !== index));
+    setTasks((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // ✔ ukończ wszystkie
   const finishAll = () => {
-    setTasks(prev => prev.map(t => ({ ...t, done: true })));
+    setTasks((prev) => prev.map((task) => ({ ...task, done: true })));
   };
 
+  // 👁 filtrowanie widoku
   const visibleTasks = showCompleted
     ? tasks
-    : tasks.filter(t => !t.done);
+    : tasks.filter((task) => !task.done);
 
   return (
     <>
@@ -41,9 +57,10 @@ function App() {
       </section>
 
       <section className="card">
-        <div className="card__title">
-          <h2>Lista zadań</h2>
-          <TaskControls
+        <div className="card__header">
+          <h2 className="card__title">Lista zadań</h2>
+
+          <TaskControl
             showCompleted={showCompleted}
             setShowCompleted={setShowCompleted}
             finishAll={finishAll}

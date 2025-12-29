@@ -1,4 +1,4 @@
-function TaskControls({ showCompleted, setShowCompleted, finishAll, tasks }) {
+function TaskControl({ showCompleted, setShowCompleted, finishAll, tasks }) {
   const allDone = tasks.length > 0 && tasks.every(t => t.done);
 
   return (
@@ -21,4 +21,4 @@ function TaskControls({ showCompleted, setShowCompleted, finishAll, tasks }) {
   );
 }
 
-export default TaskControls;
+export default TaskControl;
