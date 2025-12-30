@@ -1,29 +1,21 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import TaskControl from "./components/TaskControl";
-import useTasks from "./useTasks";
+
+import { finishAll } from "./store/tasksSlice";
 
 function App() {
-  const inputRef = useRef(null);
   const [showCompleted, setShowCompleted] = useState(true);
 
-  const {
-    tasks,
-    addTask,
-    toggleTask,
-    deleteTask,
-    finishAll,
-  } = useTasks();
+  const dispatch = useDispatch();
+  const tasks = useSelector((state) => state.tasks.tasks);
 
   const visibleTasks = showCompleted
     ? tasks
     : tasks.filter((task) => !task.done);
-
-  const handleAddTask = (text) => {
-    addTask(text);
-    inputRef.current?.focus();
-  };
 
   return (
     <>
@@ -31,7 +23,7 @@ function App() {
 
       <section className="card">
         <h2 className="card__title">Dodaj nowe zadanie</h2>
-        <TaskForm addTask={handleAddTask} />
+        <TaskForm />
       </section>
 
       <section className="card">
@@ -41,16 +33,12 @@ function App() {
           <TaskControl
             showCompleted={showCompleted}
             setShowCompleted={setShowCompleted}
-            finishAll={finishAll}
+            finishAll={() => dispatch(finishAll())}
             tasks={tasks}
           />
         </div>
 
-        <TaskList
-          tasks={visibleTasks}
-          toggleTask={toggleTask}
-          deleteTask={deleteTask}
-        />
+        <TaskList tasks={visibleTasks} />
       </section>
     </>
   );

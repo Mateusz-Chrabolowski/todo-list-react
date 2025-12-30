@@ -1,36 +1,29 @@
-import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { toggleTask, deleteTask } from "../store/tasksSlice";
 
-const Row = styled.li.attrs({
-  className: "task-row",
-})``;
+function TaskItem({ task }) {
+  const dispatch = useDispatch();
 
-const StatusButton = styled.button.attrs({
-  className: "task-status",
-})``;
-
-const Text = styled.span.attrs(({ $done }) => ({
-  className: `task-text ${$done ? "done" : ""}`,
-}))``;
-
-const DeleteButton = styled.button.attrs({
-  className: "delete-task",
-})``;
-
-function TaskItem({ task, onToggle, onDelete }) {
   return (
-    <Row>
-      <StatusButton onClick={onToggle}>
+    <li className="task-row">
+      <button
+        className="task-status"
+        onClick={() => dispatch(toggleTask(task.id))}
+      >
         {task.done ? "✓" : ""}
-      </StatusButton>
+      </button>
 
-      <Text $done={task.done}>
+      <span className={`task-text ${task.done ? "done" : ""}`}>
         {task.text}
-      </Text>
+      </span>
 
-      <DeleteButton onClick={onDelete}>
+      <button
+        className="delete-task"
+        onClick={() => dispatch(deleteTask(task.id))}
+      >
         🗑
-      </DeleteButton>
-    </Row>
+      </button>
+    </li>
   );
 }
 

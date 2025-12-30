@@ -1,22 +1,12 @@
-import styled from "styled-components";
 import TaskItem from "./TaskItem";
 
-const List = styled.ul.attrs({
-  className: "task-list",
-})``;
-
-function TaskList({ tasks, toggleTask, deleteTask }) {
+function TaskList({ tasks }) {
   return (
-    <List>
-      {tasks.map((task, index) => (
-        <TaskItem
-          key={index}
-          task={task}
-          onToggle={() => toggleTask(index)}
-          onDelete={() => deleteTask(index)}
-        />
+    <ul className="task-list">
+      {tasks.map((task) => (
+        <TaskItem key={task.id} task={task} />
       ))}
-    </List>
+    </ul>
   );
 }
 

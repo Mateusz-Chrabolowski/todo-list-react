@@ -1,42 +1,30 @@
-import { useState, useRef } from "react";
-import styled from "styled-components";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTask } from "../store/tasksSlice"; // ścieżka może być ../store/...
 
-const Form = styled.form.attrs({
-  className: "task-form",
-})``;
-
-const Input = styled.input.attrs({
-  className: "task-input",
-})``;
-
-const Button = styled.button.attrs({
-  className: "add-btn",
-})``;
-
-function TaskForm({ addTask }) {
+function TaskForm() {
   const [value, setValue] = useState("");
-  const inputRef = useRef(null);
+  const dispatch = useDispatch();
 
   const submit = () => {
     if (!value.trim()) return;
 
-    addTask(value);
+    dispatch(addTask(value));
     setValue("");
-    inputRef.current.focus();
   };
 
   return (
-    <Form onSubmit={e => e.preventDefault()}>
-      <Input
-        ref={inputRef}
+    <form className="task-form" onSubmit={(e) => e.preventDefault()}>
+      <input
+        className="task-input"
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Co jest do zrobienia?"
       />
-      <Button onClick={submit}>
+      <button className="add-btn" onClick={submit}>
         Dodaj zadanie
-      </Button>
-    </Form>
+      </button>
+    </form>
   );
 }
 
